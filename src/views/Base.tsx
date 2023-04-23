@@ -16,7 +16,7 @@ import {
     BsHeart,
 } from "react-icons/all";
 
-export default function Base(props: { children: any; }) {
+export default function Base() {
 
     return (
         <>
@@ -34,24 +34,24 @@ export default function Base(props: { children: any; }) {
                         <Heading color='white'>PicShare</Heading>
                     </Center>
                 </GridItem>
-                <GridItem pl='2' py='2' area={'side_left'}>
+                <GridItem pl='2' py='2' area={'side_left'} borderRight="1px" borderColor="gray.300" >
                     <Menu>
-                        <MenuItem icon={<BiHome size='20px'/>}>
+                        <MenuItem icon={<BiHome size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/" _activeLink={{color: "black"}}>
                             Accueil
                         </MenuItem>
-                        <MenuItem icon={<BiSearch size='20px'/>}>
+                        <MenuItem icon={<BiSearch size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/search">
                             Rechercher
                         </MenuItem>
                         {/*<MenuItem icon={<BiChat size='20px' />}>
                             Messages
                         </MenuItem>*/}
-                        <MenuItem icon={<BiBell size='20px'/>}>
+                        <MenuItem icon={<BiBell size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/notif">
                             Notifications
                         </MenuItem>
-                        <MenuItem icon={<BiPlusCircle size='20px'/>}>
+                        <MenuItem icon={<BiPlusCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/post">
                             Créer un post
                         </MenuItem>
-                        <MenuItem icon={<BiUserCircle size='20px'/>}>
+                        <MenuItem icon={<BiUserCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/profil">
                             Profil
                         </MenuItem>
                     </Menu>
@@ -139,14 +139,16 @@ export default function Base(props: { children: any; }) {
                     </SimpleGrid>
 
                 </GridItem>
-                <GridItem pr='2' pl='2' area={'side_right'}>
+
+
+                <GridItem pr='2' pl='2' area={'side_right'}  borderLeft="1px" borderColor="gray.300">
                     <Card py='2' maxW='sm' variant={"unstyled"}>
                         <CardHeader>
                             <Flex>
                                 <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                                     <Avatar name='Segun Adebayo' src='https://i.pravatar.cc/300' />
                                     <Box>
-                                        <Text>John Doe</Text>
+                                        <Text _hover={{ color: "gray.900" }}>John Doe</Text>
                                     </Box>
                                 </Flex>
                             </Flex>
