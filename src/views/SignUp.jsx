@@ -15,12 +15,63 @@ import {
     useColorModeValue,
 } from "@chakra-ui/react";
 import {useState} from "react";
+import { useFormik } from "formik";
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
+import { values } from "lodash";
+import AuthService from "../services/auth";
 
 export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
+    const formik = useFormik({
+        initialValues: {
+          name: '',
+          date:'',
+          username: '',
+          email: '',
+          password:'',
+          biography:'',
+          
+        },         
 
+        onSubmit: (values) => {
+          alert(JSON.stringify(values, null, 2))
+          AuthService.register(
+            values.name,
+            values.date,
+            values.username,
+            values.email,
+            values.password,
+            values.biography,
+            
+          ).then(
+            response => {
+             /*  this.setState({
+                message: response.data.message,
+                successful: true
+              }); */
+            },
+            error => {
+              const resMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+      
+             /*  this.setState({
+                successful: false,
+                message: resMessage
+              }); */
+            }
+          );   
+        },
+      })
+
+      
     return (
+
+
+
 
     <Flex
             minH={"100vh"}
@@ -43,38 +94,47 @@ export default function SignUp() {
                     boxShadow={"lg"}
                     p={8}
                 >
+                    <form onSubmit={formik.handleSubmit}>
                     <Stack spacing={4}>
                         <HStack>
                             <Box>
-                                <FormControl id="firstName" isRequired>
-                                    <FormLabel>First Name</FormLabel>
-                                    <Input type="text"/>
-                                </FormControl>
-                            </Box>
-                            <Box>
-                                <FormControl id="lastName">
-                                    <FormLabel>Last Name</FormLabel>
-                                    <Input type="text"/>
+                                <FormControl id="name" isRequired>
+                                    <FormLabel>Full Name</FormLabel>
+                                    <Input type="text" id='name'
+                                            name='name'
+                                            onChange={formik.handleChange}
+                                            value={formik.values.name}/>
                                 </FormControl>
                             </Box>
                         </HStack>
                         <FormControl id="birthdayDate" isRequired>
                             <FormLabel>Date of birth</FormLabel>
                             <Input
-                                type="date"/>
+                                type="date" id='date'
+                                name='date'
+                                onChange={formik.handleChange}
+                                value={formik.values.date}/>
                         </FormControl>
                         <FormControl id="username" isRequired>
                             <FormLabel>Username</FormLabel>
-                            <Input type="text"/>
+                            <Input type="text" id='username'
+                                name='username'
+                                onChange={formik.handleChange}
+                                value={formik.values.username}/>
                         </FormControl>
                         <FormControl id="email" isRequired>
                             <FormLabel>Email address</FormLabel>
-                            <Input type="email"/>
+                            <Input type="email" id='email'
+                                name='email'
+                                onChange={formik.handleChange}
+                                value={formik.values.email}/>
                         </FormControl>
                         <FormControl id="password" isRequired>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
-                                <Input type={showPassword ? "text" : "password"}/>
+                                <Input type={showPassword ? "text" : "password"} id='password'
+                                name='password'
+                                onChange={formik.handleChange}/>
                                 <InputRightElement h={"full"}>
                                     <Button
                                         variant={"ghost"}
@@ -89,7 +149,10 @@ export default function SignUp() {
                         </FormControl>
                         <FormControl id="bio">
                             <FormLabel>Biography</FormLabel>
-                            <Textarea placeholder='Tell a little about your life ...'/>
+                            <Textarea placeholder='Tell a little about your life ...' id='biography'
+                                name='biography'
+                                onChange={formik.handleChange}
+                                value={formik.values.biography}/>
                         </FormControl>
                         <Stack spacing={6} pt={2}>
                             <Button
@@ -97,9 +160,11 @@ export default function SignUp() {
                                 size="lg"
                                 bg={"#13005A"}
                                 color={"white"}
+                                type="submit"
                                 _hover={{
                                     bg: "#2D07BC",
                                 }}
+
                             >
                                 Sign up
                             </Button>
@@ -110,6 +175,8 @@ export default function SignUp() {
                             </Text>
                         </Stack>
                     </Stack>
+                    </form>
+                    
                 </Box>
             </Stack>
         </Flex>
