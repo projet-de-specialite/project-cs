@@ -36,7 +36,6 @@ export default function SignUp() {
         },         
 
         onSubmit: (values) => {
-          alert(JSON.stringify(values, null, 2))
           AuthService.register(
             values.username,
             values.email,
