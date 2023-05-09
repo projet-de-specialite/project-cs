@@ -5,7 +5,13 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Base from "./views/Base";
 import SignUp from "./views/SignUp";
 import Login from "./views/Login";
-
+import AuthService from "./services/auth";
+import { redirect } from "react-router-dom";
+  
+const Logout = ()=>{
+    AuthService.logout();
+    return redirect("/login");    
+};
 const router = createBrowserRouter([
 
     {
@@ -18,6 +24,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/login",
+        element: <Login />,
+    },
+    {
+        path: "/logout",
+        loader: Logout,
         element: <Login />,
     },
 
