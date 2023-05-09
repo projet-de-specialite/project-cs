@@ -19,36 +19,34 @@ import { useFormik } from "formik";
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
 import { values } from "lodash";
 import AuthService from "../services/auth";
+import {Alert, AlertIcon, AlertTitle, AlertDescription} from '@chakra-ui/react'
+
 
 export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [message, setMessage] = useState("");
     const formik = useFormik({
         initialValues: {
-          name: '',
-          date:'',
           username: '',
           email: '',
           password:'',
-          biography:'',
           
         },         
 
         onSubmit: (values) => {
           alert(JSON.stringify(values, null, 2))
           AuthService.register(
-            values.name,
-            values.date,
             values.username,
             values.email,
-            values.password,
-            values.biography,
+            values.password
             
           ).then(
             response => {
-             /*  this.setState({
-                message: response.data.message,
-                successful: true
-              }); */
+                setIsError(false);
+                setIsSuccess(true);
+                setMessage("Your account has been created, please login.");
             },
             error => {
               const resMessage =
@@ -57,11 +55,10 @@ export default function SignUp() {
                   error.response.data.message) ||
                 error.message ||
                 error.toString();
-      
-             /*  this.setState({
-                successful: false,
-                message: resMessage
-              }); */
+                    setIsError(true);
+                    setIsSuccess(false);
+                    setMessage(error.response.data.message);
+
             }
           );   
         },
@@ -96,25 +93,17 @@ export default function SignUp() {
                 >
                     <form onSubmit={formik.handleSubmit}>
                     <Stack spacing={4}>
-                        <HStack>
-                            <Box>
-                                <FormControl id="name" isRequired>
-                                    <FormLabel>Full Name</FormLabel>
-                                    <Input type="text" id='name'
-                                            name='name'
-                                            onChange={formik.handleChange}
-                                            value={formik.values.name}/>
-                                </FormControl>
-                            </Box>
-                        </HStack>
-                        <FormControl id="birthdayDate" isRequired>
-                            <FormLabel>Date of birth</FormLabel>
-                            <Input
-                                type="date" id='date'
-                                name='date'
-                                onChange={formik.handleChange}
-                                value={formik.values.date}/>
-                        </FormControl>
+                        {(isError) ? (<Alert status='error'>
+                            <AlertIcon />
+                            <AlertDescription>{ message }</AlertDescription>
+                            </Alert>) : ''}
+
+                        {(isSuccess) ? (<Alert status='success'>
+                            <AlertIcon />
+                            <AlertDescription>{ message }</AlertDescription>
+                            </Alert>) : ''}
+                   
+                   
                         <FormControl id="username" isRequired>
                             <FormLabel>Username</FormLabel>
                             <Input type="text" id='username'
@@ -146,13 +135,6 @@ export default function SignUp() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                        </FormControl>
-                        <FormControl id="bio">
-                            <FormLabel>Biography</FormLabel>
-                            <Textarea placeholder='Tell a little about your life ...' id='biography'
-                                name='biography'
-                                onChange={formik.handleChange}
-                                value={formik.values.biography}/>
                         </FormControl>
                         <Stack spacing={6} pt={2}>
                             <Button
