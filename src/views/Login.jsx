@@ -1,9 +1,9 @@
 import {
     Box,
-    Button, Center,
+    Button,
     Flex,
     FormControl,
-    FormLabel, GridItem,
+    FormLabel,
     Heading,
     HStack,
     Input,
@@ -11,16 +11,68 @@ import {
     InputRightElement,
     Link,
     Stack,
-    Text,
+    Text, Textarea,
     useColorModeValue,
 } from "@chakra-ui/react";
 import {useState} from "react";
+import { useFormik } from "formik";
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
+import { values } from "lodash";
+import AuthService from "../services/auth";
+import {Alert, AlertIcon, AlertTitle, AlertDescription} from '@chakra-ui/react'
+import {
+    BrowserRouter, Route, Routes, useNavigate,
+  } from 'react-router-dom';
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [message, setMessage] = useState("");
+    const navigate = useNavigate();
+    
+    const formik = useFormik({
+        initialValues: {
+          username: '',
+          password:'',
+          
+        },         
 
+        onSubmit: (values) => {
+          AuthService.login(
+            values.username,
+            values.password
+            
+          ).then(
+            response => {
+                setIsError(false);
+                setIsSuccess(true);
+                setMessage("Connection succeffuly !");
+                setTimeout(() => {
+                    navigate('/');
+                  }, 1500);
+            },
+            error => {
+              const resMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+                    setIsError(true);
+                    setIsSuccess(false);
+                    setMessage(error.response.data.message);
+
+            }
+          );   
+        },
+      })
+
+      
     return (
+
+
+
 
     <Flex
             minH={"100vh"}
@@ -28,11 +80,14 @@ export default function Login() {
             justify={"center"}
             bg={useColorModeValue("gray.50", "gray.800")}
         >
-            <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+            <Stack spacing={8} mx={"auto"} maxW={"lg"} py={8} px={6}>
                 <Stack align={"center"}>
                     <Heading fontSize={"4xl"} textAlign={"center"}>
-                        Sign in on PicShare
+                        Login on PicShare
                     </Heading>
+                    <Text fontSize={"lg"} color={"gray.600"}>
+                        to enjoy all of our cool features ✌️
+                    </Text>
                 </Stack>
                 <Box
                     rounded={"lg"}
@@ -40,15 +95,33 @@ export default function Login() {
                     boxShadow={"lg"}
                     p={8}
                 >
+                    <form onSubmit={formik.handleSubmit}>
                     <Stack spacing={4}>
-                        <FormControl id="email" isRequired>
-                            <FormLabel>Email address</FormLabel>
-                            <Input type="email"/>
+                        {(isError) ? (<Alert status='error'>
+                            <AlertIcon />
+                            <AlertDescription>{ message }</AlertDescription>
+                            </Alert>) : ''}
+
+                        {(isSuccess) ? (<Alert status='success'>
+                            <AlertIcon />
+                            <AlertDescription>{ message }</AlertDescription>
+                            </Alert>) : ''}
+                   
+                   
+                        <FormControl id="username" isRequired>
+                            <FormLabel>Username</FormLabel>
+                            <Input type="text" id='username'
+                                name='username'
+                                onChange={formik.handleChange}
+                                value={formik.values.username}/>
                         </FormControl>
+                      
                         <FormControl id="password" isRequired>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
-                                <Input type={showPassword ? "text" : "password"}/>
+                                <Input type={showPassword ? "text" : "password"} id='password'
+                                name='password'
+                                onChange={formik.handleChange}/>
                                 <InputRightElement h={"full"}>
                                     <Button
                                         variant={"ghost"}
@@ -61,28 +134,29 @@ export default function Login() {
                                 </InputRightElement>
                             </InputGroup>
                         </FormControl>
-                        <Stack spacing={10} pt={2}>
+                        <Stack spacing={6} pt={2}>
                             <Button
                                 loadingText="Submitting"
                                 size="lg"
                                 bg={"#13005A"}
                                 color={"white"}
+                                type="submit"
                                 _hover={{
                                     bg: "#2D07BC",
                                 }}
+
                             >
-                                Sign in
+                                Login
                             </Button>
-                        </Stack>
-                        <Stack py={2} textAlign={"center"}>
-                            <Link color={"blue.400"} href={"/forgot-password"}>Forgot password ?</Link>
                         </Stack>
                         <Stack pt={4}>
                             <Text align={"center"}>
-                                New on PicShare? <Link href={"/signup"} color={"blue.400"}>Create an account</Link>
+                                Don't have account ? <Link href={"/signup"} color={"blue.400"}>SignUp</Link>
                             </Text>
                         </Stack>
                     </Stack>
+                    </form>
+                    
                 </Box>
             </Stack>
         </Flex>
