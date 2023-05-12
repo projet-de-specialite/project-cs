@@ -4,10 +4,7 @@ import {
     Text, Avatar, CardHeader, Flex, Box, CardFooter, Button, Image, SimpleGrid, Center, CardBody
 } from "@chakra-ui/react";
 import {
-    BiBell,
-    BiHome,
-    BiPaperPlane, BiPlusCircle, BiSearch,
-    BiUserCircle,
+    BiPaperPlane,
     BsChat,
     BsHeart,
 } from "react-icons/all";

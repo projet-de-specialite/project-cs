@@ -4,6 +4,7 @@ import {ChakraProvider, theme,} from "@chakra-ui/react"
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Base from "./views/Base";
 import Home from "./views/Home";
+import Profile from "./views/Profile";
 import SignUp from "./views/SignUp";
 import Login from "./views/Login";
 import AuthService from "./services/auth";
