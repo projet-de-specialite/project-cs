@@ -1,5 +1,5 @@
 import {
-    Text, Avatar, CardHeader, Flex, Heading, Box, CardFooter, Button, Image, Card, Center, CardBody
+    Text, Avatar, CardHeader, Flex, Heading, Box, CardFooter, Button, Image, Card, CardBody
  } from "@chakra-ui/react";
  
 import {
@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
+import Post from "../components/Post";
 
 
 type ProfileData = {
@@ -59,48 +60,13 @@ const Profile = () => {
               Joined: {profileData.created_on}
             </Text>
           </Box>
+          <Heading size='sm'>Posts</Heading>
+          <Post/>
         </>
       ) : (
-        <Text>Loading profile data...</Text>
+        <Text>Chargement des données du profil ...</Text>
       )}
-      <Heading size='sm'>Posts</Heading>
 
-      <Card maxW='md'>
-            <CardHeader>
-                <Flex>
-                    <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
-                        <Avatar name='ChatRoon' src='https://i.pravatar.cc/150?img=49' />
-                        <Box>
-                            <Heading size='sm'>ChatRoon</Heading>
-                            <Text fontSize='xs'>20 mars 2023</Text>
-                        </Box>
-                    </Flex>
-                </Flex>
-            </CardHeader>
-            <Image
-                objectFit='cover'
-                src='https://fastly.picsum.photos/id/28/4928/3264.jpg?hmac=GnYF-RnBUg44PFfU5pcw_Qs0ReOyStdnZ8MtQWJqTfA'
-                alt='ChatRoon'
-            />
-            <CardBody>
-                <Text fontSize='xs'>
-                    Beautiful sky
-                </Text>
-            </CardBody>
-            <CardFooter
-                justify='flex-start'
-                flexWrap='wrap'
-                sx={{
-                    '& > button': {
-                        minW: '136px',
-                    },
-                }}
-            >
-                <Button flex='1' variant='ghost' leftIcon={<BsHeart />}>20</Button>
-                <Button flex='1' variant='ghost' leftIcon={<BsChat />}>4</Button>
-                <Button flex='1' variant='ghost' leftIcon={<BiPaperPlane />}></Button>
-            </CardFooter>
-            </Card>
     </Flex>
   );
 };

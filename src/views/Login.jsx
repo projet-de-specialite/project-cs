@@ -83,10 +83,10 @@ export default function Login() {
             <Stack spacing={8} mx={"auto"} maxW={"lg"} py={8} px={6}>
                 <Stack align={"center"}>
                     <Heading fontSize={"4xl"} textAlign={"center"}>
-                        Login on PicShare
+                        Se connecter à PicShare
                     </Heading>
                     <Text fontSize={"lg"} color={"gray.600"}>
-                        to enjoy all of our cool features ✌️
+                        pour partager votre vie fabuleuse ✌️
                     </Text>
                 </Stack>
                 <Box
@@ -109,7 +109,7 @@ export default function Login() {
                    
                    
                         <FormControl id="username" isRequired>
-                            <FormLabel>Username</FormLabel>
+                            <FormLabel>Nom d'utilisateur</FormLabel>
                             <Input type="text" id='username'
                                 name='username'
                                 onChange={formik.handleChange}
@@ -117,7 +117,7 @@ export default function Login() {
                         </FormControl>
                       
                         <FormControl id="password" isRequired>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>Mot de passe</FormLabel>
                             <InputGroup>
                                 <Input type={showPassword ? "text" : "password"} id='password'
                                 name='password'
@@ -136,7 +136,7 @@ export default function Login() {
                         </FormControl>
                         <Stack spacing={6} pt={2}>
                             <Button
-                                loadingText="Submitting"
+                                loadingText="Soumission"
                                 size="lg"
                                 bg={"#13005A"}
                                 color={"white"}
@@ -146,12 +146,12 @@ export default function Login() {
                                 }}
 
                             >
-                                Login
+                                Connexion
                             </Button>
                         </Stack>
                         <Stack pt={4}>
                             <Text align={"center"}>
-                                Don't have account ? <Link href={"/signup"} color={"blue.400"}>SignUp</Link>
+                                Vous n'avez pas de compte ? <Link href={"/signup"} color={"blue.400"}>S'inscrire</Link>
                             </Text>
                         </Stack>
                     </Stack>

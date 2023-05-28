@@ -46,9 +46,6 @@ const Base = () => {
                         <MenuItem icon={<BiSearch size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/search">
                             Rechercher
                         </MenuItem>
-                        {/*<MenuItem icon={<BiChat size='20px' />}>
-                            Messages
-                        </MenuItem>*/}
                         <MenuItem icon={<BiBell size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/notif">
                             Notifications
                         </MenuItem>

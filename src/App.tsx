@@ -14,27 +14,6 @@ const Logout = ()=>{
     AuthService.logout();
     return redirect("/login");    
 };
-// const router = createBrowserRouter([
-
-//     {
-//         path: "/",
-//         element: <Home />,
-//     },
-//     {
-//         path: "/signup",
-//         element: <SignUp />,
-//     },
-//     {
-//         path: "/login",
-//         element: <Login />,
-//     },
-//     {
-//         path: "/logout",
-//         loader: Logout,
-//         element: <Login />,
-//     },
-
-// ]);
 
 export const App = () => (
     <ChakraProvider theme={theme}>
@@ -49,6 +28,5 @@ export const App = () => (
             
         </Routes>
         
-        {/* <RouterProvider router={router}/> */}
     </ChakraProvider>
 )

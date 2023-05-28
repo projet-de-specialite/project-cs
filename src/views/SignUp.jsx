@@ -45,7 +45,7 @@ export default function SignUp() {
             response => {
                 setIsError(false);
                 setIsSuccess(true);
-                setMessage("Your account has been created, please login.");
+                setMessage("Votre compte à été créé, connectez vous.");
             },
             error => {
               const resMessage =
@@ -78,10 +78,10 @@ export default function SignUp() {
             <Stack spacing={8} mx={"auto"} maxW={"lg"} py={8} px={6}>
                 <Stack align={"center"}>
                     <Heading fontSize={"4xl"} textAlign={"center"}>
-                        Sign up on PicShare
+                        S'inscrire sur PicShare
                     </Heading>
                     <Text fontSize={"lg"} color={"gray.600"}>
-                        to enjoy all of our cool features ✌️
+                        pour partager votre vie fabuleuse ✌️
                     </Text>
                 </Stack>
                 <Box
@@ -104,21 +104,21 @@ export default function SignUp() {
                    
                    
                         <FormControl id="username" isRequired>
-                            <FormLabel>Username</FormLabel>
+                            <FormLabel>Nom d'utilisateur</FormLabel>
                             <Input type="text" id='username'
                                 name='username'
                                 onChange={formik.handleChange}
                                 value={formik.values.username}/>
                         </FormControl>
                         <FormControl id="email" isRequired>
-                            <FormLabel>Email address</FormLabel>
+                            <FormLabel>Email</FormLabel>
                             <Input type="email" id='email'
                                 name='email'
                                 onChange={formik.handleChange}
                                 value={formik.values.email}/>
                         </FormControl>
                         <FormControl id="password" isRequired>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>Mot de passe</FormLabel>
                             <InputGroup>
                                 <Input type={showPassword ? "text" : "password"} id='password'
                                 name='password'
@@ -137,7 +137,7 @@ export default function SignUp() {
                         </FormControl>
                         <Stack spacing={6} pt={2}>
                             <Button
-                                loadingText="Submitting"
+                                loadingText="Soumission"
                                 size="lg"
                                 bg={"#13005A"}
                                 color={"white"}
@@ -147,12 +147,12 @@ export default function SignUp() {
                                 }}
 
                             >
-                                Sign up
+                                S'inscrire
                             </Button>
                         </Stack>
                         <Stack pt={4}>
                             <Text align={"center"}>
-                                Already an user? <Link href={"/login"} color={"blue.400"}>Login</Link>
+                                Vous avez déjà un compte ? <Link href={"/login"} color={"blue.400"}>Se connecter</Link>
                             </Text>
                         </Stack>
                     </Stack>
