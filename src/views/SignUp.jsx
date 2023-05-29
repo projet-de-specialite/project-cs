@@ -14,19 +14,30 @@ import {
     Text, Textarea,
     useColorModeValue,
 } from "@chakra-ui/react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { useFormik } from "formik";
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
 import { values } from "lodash";
 import AuthService from "../services/auth";
 import {Alert, AlertIcon, AlertTitle, AlertDescription} from '@chakra-ui/react'
+import {useNavigate} from "react-router-dom";
 
 
-export default function SignUp() {
+export default function SignUp(props) {
     const [showPassword, setShowPassword] = useState(false);
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState("");
+
+    const navigate = useNavigate();
+    const { user } = props.user;
+
+    useEffect(() => {
+        if(user != "null" && user != undefined){
+            navigate("/");
+        }
+    },[user])
+
     const formik = useFormik({
         initialValues: {
           username: '',

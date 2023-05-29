@@ -12,6 +12,7 @@ import axios from "axios";
 
 import React, { useEffect, useState } from "react";
 import Post from "../components/Post";
+import {useNavigate} from "react-router-dom";
 
 
 type ProfileData = {
@@ -23,11 +24,19 @@ type ProfileData = {
     created_on: string;
   };
 
-const Profile = () => {
+const Profile = (props: any) => {
   const [profileData, setProfileData] = useState<ProfileData>();
-  
 
-  useEffect(() => {
+    const navigate = useNavigate();
+    const { user } = props.user;
+
+    useEffect(() => {
+        if(user == "null" || user == undefined){
+            navigate("/login");
+        }
+    },[user])
+
+    useEffect(() => {
     const fetchProfileData = async () => {
       try {
         const response = await axios.get<ProfileData>(process.env.REACT_APP_PROFILE_URL + "profiles/1");
