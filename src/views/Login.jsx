@@ -30,14 +30,13 @@ export default function Login(props) {
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
-    const { user } = props.user;
+    const user = props.user
 
     useEffect(() => {
-        console.log(user);
-        if(user != "null" && user != undefined){
+        if (user != null) {
             navigate("/");
         }
-    },[user])
+    },[])
 
     const formik = useFormik({
         initialValues: {
