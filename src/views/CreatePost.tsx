@@ -11,8 +11,19 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import PostService from "../services/post";
+import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 
-export default function CreatePost() {
+export default function CreatePost(props:any) {
+
+	const navigate = useNavigate();
+	const { user } = props.user;
+
+	useEffect(() => {
+		if(user == "null" || user == undefined){
+			navigate("/login");
+		}
+	},[user])
 
 	const formik = useFormik({
 		initialValues: {

@@ -43,10 +43,10 @@ const Base = () => {
                         <MenuItem icon={<BiHome size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/" _activeLink={{color: "black"}}>
                             Accueil
                         </MenuItem>
-                        <MenuItem icon={<BiPlusCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/post">
+                        <MenuItem icon={<BiPlusCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/createPost">
                             Créer un post
                         </MenuItem>
-                        <MenuItem icon={<BiUserCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/profil">
+                        <MenuItem icon={<BiUserCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/profile">
                             Profil
                         </MenuItem>
                     </Menu>
