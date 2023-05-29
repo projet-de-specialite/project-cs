@@ -9,6 +9,7 @@ import SignUp from "./views/SignUp";
 import Login from "./views/Login";
 import AuthService from "./services/auth";
 import { redirect,Routes, Route } from "react-router-dom";
+import CreatePost from "./views/CreatePost";
 
 const Logout = ()=>{
     AuthService.logout();
@@ -22,6 +23,7 @@ export const App = () => (
             <Route path="/" element={<Base />}>
                 <Route index element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/createPost" element={<CreatePost />} />
             </Route>
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
