@@ -24,7 +24,7 @@ class PostService {
     }
     usersString += "limit=100"
 
-    return axios.get(API_URL + "posts/?" + usersString);
+    return axios.get(API_URL + "posts/?" + usersString).then((response) => response.data);
   }
 
   getUserPosts(owner_id: number) {

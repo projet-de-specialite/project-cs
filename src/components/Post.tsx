@@ -10,7 +10,7 @@ import {
 } from "react-icons/all";
 
 
-export default function Post() {
+export default function Post(props:any) {
 
     return (
         <>

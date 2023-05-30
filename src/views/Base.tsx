@@ -8,19 +8,26 @@ import {
     Text, Avatar, CardHeader, Flex, Box, Center
 } from "@chakra-ui/react";
 import {
-    BiBell,
     BiHome,
-    BiPlusCircle, BiSearch,
+    BiPlusCircle,
     BiUserCircle,
 
 } from "react-icons/all";
+import AuthService from "../services/auth";
 
-import { Outlet } from "react-router-dom";
-
-import  { ReactNode } from 'react';
+import {useNavigate} from "react-router-dom";
 
 
-const Base = () => {
+const Base = (props: any) => {
+
+    const navigate = useNavigate();
+    const user = props.user
+    console.log(user)
+
+    const logout = () => {
+        AuthService.logout();
+        navigate("/login");
+    }
 
     return (
         <>
@@ -49,15 +56,18 @@ const Base = () => {
                         <MenuItem icon={<BiUserCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/profile">
                             Profil
                         </MenuItem>
+                        { user != null &&
+                            <MenuItem icon={<BiUserCircle size='20px'/>} onClick={() => logout()} _hover={{ color: "gray.900" }} as="a" href={""}>
+                                Déconnexion
+                            </MenuItem>
+                        }
+
                     </Menu>
                 </GridItem>
+
                 <GridItem pl='2' py='5' area={'main'}>
-
-                    <Outlet />
-
-
+                    {props.children}
                 </GridItem>
-
 
                 <GridItem pr='2' pl='2' area={'side_right'}  borderLeft="1px" borderColor="gray.300">
                     <Card py='2' maxW='sm' variant={"unstyled"}>

@@ -34,7 +34,7 @@ class AuthService {
     const userStr = localStorage.getItem("user");
     if (userStr) return JSON.parse(userStr);
 
-    return "null";
+    return null;
   }
 }
 

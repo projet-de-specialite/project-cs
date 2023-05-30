@@ -1,18 +1,13 @@
 import {
-    Text, Avatar, CardHeader, Flex, Heading, Box, CardFooter, Button, Image, Card, CardBody
+    Text, Avatar, Flex, Heading, Box,
  } from "@chakra-ui/react";
  
-import {
-    BiPaperPlane,
-    BsChat,
-    BsHeart,
-} from "react-icons/all";
-
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
 import Post from "../components/Post";
 import {useNavigate} from "react-router-dom";
+import Base from "./Base";
 
 
 type ProfileData = {
@@ -28,19 +23,24 @@ const Profile = (props: any) => {
   const [profileData, setProfileData] = useState<ProfileData>();
 
     const navigate = useNavigate();
-    const { user } = props.user;
+    const user = props.user
 
     useEffect(() => {
-        if(user == "null" || user == undefined){
+        if (user == null) {
             navigate("/login");
         }
-    },[user])
+    },[])
 
     useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get<ProfileData>(process.env.REACT_APP_PROFILE_URL + "profiles/1");
-        setProfileData(response.data);
+        await axios.get<ProfileData>(process.env.REACT_APP_PROFILE_URL + "profiles/1")
+            .then((response) => {
+                setProfileData(response.data);
+            })
+            .catch((error) => {
+                console.log(error)
+            });
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -50,33 +50,36 @@ const Profile = (props: any) => {
   }, []);
 
   return (
-    <Flex flexDirection="column" alignItems="center">
-      {profileData ? (
-        <>
-          <Avatar size="xl" src={profileData.avatar} mb="4" />
-          <Box>
-            <Heading as="h2" size="lg">
-              {profileData.name}
-            </Heading>
-            <Text>{profileData.birthDate}</Text>
-          </Box>
-          <Box mt="4">
-            <Text fontSize="lg">{profileData.bio}</Text>
-            <Text fontSize="md" color="blue.500" mt="2">
-              {profileData.website}
-            </Text>
-            <Text fontSize="sm" mt="2">
-              Joined: {profileData.created_on}
-            </Text>
-          </Box>
-          <Heading size='sm'>Posts</Heading>
-          <Post/>
-        </>
-      ) : (
-        <Text>Chargement des données du profil ...</Text>
-      )}
+      <Base user={user}>
+        <Flex flexDirection="column" alignItems="center">
+          {profileData ? (
+            <>
+              <Avatar size="xl" src={profileData.avatar} mb="4" />
+              <Box>
+                <Heading as="h2" size="lg">
+                  {profileData.name}
+                </Heading>
+                <Text>{profileData.birthDate}</Text>
+              </Box>
+              <Box mt="4">
+                <Text fontSize="lg">{profileData.bio}</Text>
+                <Text fontSize="md" color="blue.500" mt="2">
+                  {profileData.website}
+                </Text>
+                <Text fontSize="sm" mt="2">
+                  Joined: {profileData.created_on}
+                </Text>
+              </Box>
+              <Heading size='sm'>Posts</Heading>
+              <Post/>
+            </>
+          ) : (
+            <Text>Chargement des données du profil ...</Text>
+          )}
 
-    </Flex>
+        </Flex>
+      </Base>
+
   );
 };
 

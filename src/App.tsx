@@ -10,11 +10,10 @@ import AuthService from "./services/auth";
 import { redirect,Routes, Route } from "react-router-dom";
 import CreatePost from "./views/CreatePost";
 import auth from "./services/auth";
-import {useEffect} from "react";
 
 const Logout = ()=>{
     AuthService.logout();
-    return redirect("/login");    
+    return redirect("/login");
 };
 
 export const App = () => {
@@ -24,14 +23,11 @@ export const App = () => {
     return (
         <ChakraProvider theme={theme}>
             <Routes>
-
-                <Route path="/" element={<Base />}>
-                    <Route index element={<Home user={currentUser} />} />
-                    <Route path="/profile" element={<Profile user={currentUser}/>} />
-                    <Route path="/createPost" element={<CreatePost user={currentUser}/>} />
-                </Route>
-                <Route path="/signUp" element={<SignUp user={currentUser}/>} />
-                <Route path="/login" element={<Login user={currentUser}/>} />
+                <Route path="/" index element={<Home user={currentUser} />} />
+                <Route path="/profile" element={<Profile user={currentUser} />} />
+                <Route path="/createPost" element={<CreatePost user={currentUser} />} />
+                <Route path="/signUp" element={<SignUp user={currentUser} />} />
+                <Route path="/login" element={<Login user={currentUser} />} />
 
             </Routes>
 

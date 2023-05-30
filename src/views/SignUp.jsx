@@ -30,13 +30,13 @@ export default function SignUp(props) {
     const [message, setMessage] = useState("");
 
     const navigate = useNavigate();
-    const { user } = props.user;
+    const user = props.user
 
     useEffect(() => {
-        if(user != "null" && user != undefined){
+        if (user != null) {
             navigate("/");
         }
-    },[user])
+    },[])
 
     const formik = useFormik({
         initialValues: {
