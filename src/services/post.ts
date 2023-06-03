@@ -28,7 +28,7 @@ class PostService {
   }
 
   getUserPosts(owner_id: number) {
-    return axios.get(API_URL + "posts/?owners=" + owner_id);
+    return axios.get(API_URL + "posts/?owners=" + owner_id).then((response) => response.data);
   }
 }
 

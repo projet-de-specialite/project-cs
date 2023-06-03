@@ -10,6 +10,7 @@ import AuthService from "./services/auth";
 import { redirect,Routes, Route } from "react-router-dom";
 import CreatePost from "./views/CreatePost";
 import auth from "./services/auth";
+import Subscription from "./views/Subscription";
 
 const Logout = ()=>{
     AuthService.logout();
@@ -25,6 +26,7 @@ export const App = () => {
             <Routes>
                 <Route path="/" index element={<Home user={currentUser} />} />
                 <Route path="/profile" element={<Profile user={currentUser} />} />
+                <Route path="/subscription" element={<Subscription user={currentUser} />} />
                 <Route path="/createPost" element={<CreatePost user={currentUser} />} />
                 <Route path="/signUp" element={<SignUp user={currentUser} />} />
                 <Route path="/login" element={<Login user={currentUser} />} />
