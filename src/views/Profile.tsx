@@ -1,6 +1,6 @@
 import {
     Text, Avatar, Flex, Heading, Box, SimpleGrid,
-} from "@chakra-ui/react";
+ } from "@chakra-ui/react";
  
 import axios from "axios";
 
@@ -82,6 +82,7 @@ const Profile = (props: any) => {
                         <Post post={post} />
                     )}
                 </SimpleGrid>
+
             </>
           ) : (
             <Text>Chargement des données du profil ...</Text>
