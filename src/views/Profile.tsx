@@ -1,6 +1,6 @@
 import {
-    Text, Avatar, Flex, Heading, Box,
- } from "@chakra-ui/react";
+    Text, Avatar, Flex, Heading, Box, SimpleGrid,
+} from "@chakra-ui/react";
  
 import axios from "axios";
 
@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import Post from "../components/Post";
 import {useNavigate} from "react-router-dom";
 import Base from "./Base";
-
+import PostService from "../services/post";
 
 type ProfileData = {
     name: string;
@@ -21,9 +21,10 @@ type ProfileData = {
 
 const Profile = (props: any) => {
   const [profileData, setProfileData] = useState<ProfileData>();
+  const [posts, setPosts] = useState([]);
 
     const navigate = useNavigate();
-    const user = props.user
+    const user = props.user;
 
     useEffect(() => {
         if (user == null) {
@@ -47,7 +48,12 @@ const Profile = (props: any) => {
     };
 
     fetchProfileData();
+    fetchUserPost();
   }, []);
+
+    const fetchUserPost = async () => {
+      setPosts(await PostService.getUserPosts(1));
+    };
 
   return (
       <Base user={user}>
@@ -71,7 +77,11 @@ const Profile = (props: any) => {
                 </Text>
               </Box>
               <Heading size='sm'>Posts</Heading>
-              <Post/>
+                <SimpleGrid columns={1} spacing={10}>
+                    {posts && posts.map(post =>
+                        <Post post={post} />
+                    )}
+                </SimpleGrid>
             </>
           ) : (
             <Text>Chargement des données du profil ...</Text>

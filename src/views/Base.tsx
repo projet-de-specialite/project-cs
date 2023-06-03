@@ -10,12 +10,13 @@ import {
 import {
     BiHome,
     BiPlusCircle,
-    BiUserCircle,
+    BiUserCircle, BsBoxArrowLeft, BsFillPeopleFill,
 
 } from "react-icons/all";
 import AuthService from "../services/auth";
 
 import {useNavigate} from "react-router-dom";
+import React from "react";
 
 
 const Base = (props: any) => {
@@ -56,8 +57,11 @@ const Base = (props: any) => {
                         <MenuItem icon={<BiUserCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/profile">
                             Profil
                         </MenuItem>
+                        <MenuItem icon={<BsFillPeopleFill size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/subscription">
+                            Abonnements
+                        </MenuItem>
                         { user != null &&
-                            <MenuItem icon={<BiUserCircle size='20px'/>} onClick={() => logout()} _hover={{ color: "gray.900" }} as="a" href={""}>
+                            <MenuItem icon={<BsBoxArrowLeft size='20px'/>} onClick={() => logout()} _hover={{ color: "gray.900" }} as="a" href={""}>
                                 Déconnexion
                             </MenuItem>
                         }
