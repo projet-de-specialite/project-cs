@@ -82,6 +82,7 @@ const Profile = (props: any) => {
                         <Post post={post} user_id={user.id} />
                     )}
                 </SimpleGrid>
+
             </>
           ) : (
             <Text>Chargement des données du profil ...</Text>

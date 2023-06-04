@@ -26,7 +26,7 @@ import CommentService from "../services/comment";
 
 export default function Post(props:any) {
 
-    const [openModale, setOpenModale] = useState(false);
+  const [openModale, setOpenModale] = useState(false);
     const [comment, setComment] = useState("");
 
     const toggleModale = async () => {

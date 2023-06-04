@@ -11,7 +11,6 @@ import {
     BiHome,
     BiPlusCircle,
     BiUserCircle, BsBoxArrowLeft, BsFillPeopleFill,
-
 } from "react-icons/all";
 import AuthService from "../services/auth";
 
