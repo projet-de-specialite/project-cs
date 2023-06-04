@@ -79,7 +79,7 @@ const Profile = (props: any) => {
               <Heading size='sm'>Posts</Heading>
                 <SimpleGrid columns={1} spacing={10}>
                     {posts && posts.map(post =>
-                        <Post post={post} />
+                        <Post post={post} user_id={user.id} />
                     )}
                 </SimpleGrid>
             </>
