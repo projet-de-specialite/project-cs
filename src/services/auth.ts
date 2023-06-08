@@ -30,7 +30,7 @@ class AuthService {
     });
   }
 
-  getCurrentUser() {
+  getCurrentUser() : any{
     const userStr = localStorage.getItem("user");
     if (userStr) return JSON.parse(userStr);
 

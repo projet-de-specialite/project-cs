@@ -11,10 +11,15 @@ const container = document.getElementById("root")
 if (!container) throw new Error('Failed to find the root element');
 const root = ReactDOM.createRoot(container)
 
+localStorage.setItem("user", JSON.stringify({username:"serkox", id:1}));
+
+
 root.render(
     <React.StrictMode>
-        <ColorModeScript/>
-        <App/>
+        <BrowserRouter>
+            <ColorModeScript/>
+            <App/>
+        </BrowserRouter>
     </React.StrictMode>,
 )
 

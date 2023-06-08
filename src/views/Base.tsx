@@ -5,18 +5,29 @@ import {
     Heading,
     Menu,
     MenuItem,
-    Text, Avatar, CardHeader, Flex, Box, CardFooter, Button, Image, SimpleGrid, Center, CardBody
+    Text, Avatar, CardHeader, Flex, Box, Center
 } from "@chakra-ui/react";
 import {
-    BiBell,
     BiHome,
-    BiPaperPlane, BiPlusCircle, BiSearch,
-    BiUserCircle,
-    BsChat,
-    BsHeart,
+    BiPlusCircle,
+    BiUserCircle, BsBoxArrowLeft, BsFillPeopleFill,
 } from "react-icons/all";
+import AuthService from "../services/auth";
 
-export default function Base() {
+import {useNavigate} from "react-router-dom";
+import React from "react";
+
+
+const Base = (props: any) => {
+
+    const navigate = useNavigate();
+    const user = props.user
+    console.log(user)
+
+    const logout = () => {
+        AuthService.logout();
+        navigate("/login");
+    }
 
     return (
         <>
@@ -39,107 +50,27 @@ export default function Base() {
                         <MenuItem icon={<BiHome size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/" _activeLink={{color: "black"}}>
                             Accueil
                         </MenuItem>
-                        <MenuItem icon={<BiSearch size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/search">
-                            Rechercher
-                        </MenuItem>
-                        {/*<MenuItem icon={<BiChat size='20px' />}>
-                            Messages
-                        </MenuItem>*/}
-                        <MenuItem icon={<BiBell size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/notif">
-                            Notifications
-                        </MenuItem>
-                        <MenuItem icon={<BiPlusCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/post">
+                        <MenuItem icon={<BiPlusCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/createPost">
                             Créer un post
                         </MenuItem>
-                        <MenuItem icon={<BiUserCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/profil">
+                        <MenuItem icon={<BiUserCircle size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/profile">
                             Profil
                         </MenuItem>
+                        <MenuItem icon={<BsFillPeopleFill size='20px'/>} _hover={{ color: "gray.900" }} as="a" href="/subscription">
+                            Abonnements
+                        </MenuItem>
+                        { user != null &&
+                            <MenuItem icon={<BsBoxArrowLeft size='20px'/>} onClick={() => logout()} _hover={{ color: "gray.900" }} as="a" href={""}>
+                                Déconnexion
+                            </MenuItem>
+                        }
+
                     </Menu>
                 </GridItem>
+
                 <GridItem pl='2' py='5' area={'main'}>
-
-                    <SimpleGrid columns={1} spacing={10}>
-                        <Center>
-                            <Card maxW='md'>
-                                <CardHeader>
-                                    <Flex>
-                                        <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
-                                            <Avatar name='ChatRoon' src='https://i.pravatar.cc/150?img=49' />
-                                            <Box>
-                                                <Heading size='sm'>ChatRoon</Heading>
-                                                <Text fontSize='xs'>20 mars 2023</Text>
-                                            </Box>
-                                        </Flex>
-                                    </Flex>
-                                </CardHeader>
-                                <Image
-                                    objectFit='cover'
-                                    src='https://fastly.picsum.photos/id/28/4928/3264.jpg?hmac=GnYF-RnBUg44PFfU5pcw_Qs0ReOyStdnZ8MtQWJqTfA'
-                                    alt='ChatRoon'
-                                />
-                                <CardBody>
-                                    <Text fontSize='xs'>
-                                        Beautiful sky
-                                    </Text>
-                                </CardBody>
-                                <CardFooter
-                                    justify='flex-start'
-                                    flexWrap='wrap'
-                                    sx={{
-                                        '& > button': {
-                                            minW: '136px',
-                                        },
-                                    }}
-                                >
-                                    <Button flex='1' variant='ghost' leftIcon={<BsHeart />}>20</Button>
-                                    <Button flex='1' variant='ghost' leftIcon={<BsChat />}>4</Button>
-                                    <Button flex='1' variant='ghost' leftIcon={<BiPaperPlane />}></Button>
-                                </CardFooter>
-                            </Card>
-                        </Center>
-                        <Center>
-                            <Card maxW='md'>
-                                <CardHeader>
-                                    <Flex>
-                                        <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
-                                            <Avatar name='Gaeitan SceauSix' src='https://i.pravatar.cc/150?img=68' />
-
-                                            <Box>
-                                                <Heading size='sm'>Gaeitan SceauSix</Heading>
-                                                <Text fontSize='xs'>20 mars 2023</Text>
-                                            </Box>
-                                        </Flex>
-                                    </Flex>
-                                </CardHeader>
-                                <Image
-                                    objectFit='cover'
-                                    src='https://fastly.picsum.photos/id/13/2500/1667.jpg?hmac=SoX9UoHhN8HyklRA4A3vcCWJMVtiBXUg0W4ljWTor7s'
-                                    alt='Gaeitan SceauSix'
-                                />
-                                <CardBody>
-                                    <Text fontSize='xs'>
-                                        Beautiful sky
-                                    </Text>
-                                </CardBody>
-                                <CardFooter
-                                    justify='flex-start'
-                                    flexWrap='wrap'
-                                    sx={{
-                                        '& > button': {
-                                            minW: '136px',
-                                        },
-                                    }}
-                                >
-                                    <Button flex='1' variant='ghost' leftIcon={<BsHeart />}>20</Button>
-                                    <Button flex='1' variant='ghost' leftIcon={<BsChat />}>4</Button>
-                                    <Button flex='1' variant='ghost' leftIcon={<BiPaperPlane />}></Button>
-                                </CardFooter>
-                            </Card>
-                        </Center>
-                    </SimpleGrid>
-
+                    {props.children}
                 </GridItem>
-
 
                 <GridItem pr='2' pl='2' area={'side_right'}  borderLeft="1px" borderColor="gray.300">
                     <Card py='2' maxW='sm' variant={"unstyled"}>
@@ -162,3 +93,5 @@ export default function Base() {
         </>
     );
 }
+
+export default Base;
