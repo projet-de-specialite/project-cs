@@ -18,7 +18,7 @@ export default function Subscription(props: any) {
 			navigate("/login");
 		}
 		fetchSubscriptionData();
-	},[])
+	},[navigate, user])
 
 	const fetchSubscriptionData = async () => {
 		setSubscriptions(await SubscriptionService.getSubscriptions(1));
@@ -34,7 +34,7 @@ export default function Subscription(props: any) {
 	return (
 		<>
 			<Base user={user}>
-				{user != "" &&
+				{user !== "" &&
 					<Tabs isFitted variant='enclosed'>
 						<TabList mb='1em'>
 							<Tab>Abonnements</Tab>

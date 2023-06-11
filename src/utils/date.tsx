@@ -1,11 +1,8 @@
 function TimestampFormatter({ timestamp }: any) {
-  const seconds = timestamp._seconds._seconds;
-  if (typeof seconds !== "number") {
-    console.error("Invalid timestamp:", timestamp);
-    return <span>Invalid timestamp</span>;
-  }
+  const seconds = timestamp._seconds;
+  const nanoseconds = timestamp._nanoseconds;
 
-  const date = new Date(seconds * 1000);
+  const date = new Date(seconds * 1000 + nanoseconds / 1e6);
 
   const dateString = date.toLocaleDateString();
   const timeString = date.toLocaleTimeString();

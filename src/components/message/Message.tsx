@@ -1,35 +1,35 @@
-import { Box, Text, Image, HStack } from "@chakra-ui/react";
+import { Box, Text, Image, HStack, Flex } from "@chakra-ui/react";
 import TimestampFormatter from "../../utils/date";
+import "./message.css";
 
 interface IMessage {
   message: {
     text: string;
-    createdAt: number;
+    createdAt: { _seconds: number; _nanoseconds: number };
   };
   own: boolean;
 }
+
 export default function Message({ message, own }: IMessage) {
-  console.log(message.createdAt);
+  const imgUrl =
+    "https://static.independent.co.uk/2022/08/22/10/mark%20zuckerberg%20metaverse%20avatar.png?quality=75&width=320&crop=1385%3A1039%2Csmart&auto=webp 320w,https://static.independent.co.uk/2022/08/22/10/mark%20zuckerberg%20metaverse%20avatar.png?quality=75&width=640&crop=1385%3A1039%2Csmart&auto=webp 640w,https://static.independent.co.uk/2022/08/22/10/mark%20zuckerberg%20metaverse%20avatar.png?quality=75&width=990&crop=1385%3A1039%2Csmart&auto=webp 990w";
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignSelf={own ? "flex-end" : "flex-start"}
-    >
-      <HStack spacing={2}>
-        <Image
-          boxSize="50px"
-          borderRadius="full"
-          src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-          alt=""
-        />
-        <Text>{message.text}</Text>
-      </HStack>
-      <Text fontSize="xs" color="gray.500">
-        <TimestampFormatter
-          timestamp={{ _seconds: message.createdAt, _nanoseconds: 0 }}
-        />
-      </Text>
-    </Box>
+    <Flex direction="column" align={own ? "flex-end" : "flex-start"} mt={5}>
+      <Flex align="center">
+        <Image boxSize="32px" borderRadius="full" src={imgUrl} alt="" mr={2} />
+        <Box
+          p={2}
+          borderRadius="md"
+          backgroundColor={own ? "gray.200" : "blue.500"}
+          color={own ? "black" : "white"}
+          maxWidth="300px"
+        >
+          <Text fontSize="md">{message.text}</Text>
+        </Box>
+      </Flex>
+      <Box mt={2} fontSize="sm" color="gray.500">
+        <TimestampFormatter timestamp={message.createdAt} />
+      </Box>
+    </Flex>
   );
 }

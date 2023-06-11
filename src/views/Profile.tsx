@@ -30,7 +30,7 @@ const Profile = (props: any) => {
         if (user == null) {
             navigate("/login");
         }
-    },[])
+    },[navigate, user])
 
     useEffect(() => {
     const fetchProfileData = async () => {

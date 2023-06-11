@@ -1,14 +1,16 @@
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
-import { Box, Flex, Input, Button, VStack } from "@chakra-ui/react";
+import { Box, Flex, Input, Button, VStack, Center } from "@chakra-ui/react";
 import IUser from "../../models/User";
 import IConversation from "../../models/Conversation";
 import IMessage from "../../models/Message";
+import { useNavigate } from "react-router-dom";
+import Base from "../Base";
 
-export default function Messenger() {
+export default function Messenger(props: any) {
   const [conversations, setConversations] = useState<IConversation[]>([]);
   const [currentChat, setCurrentChat] = useState<IConversation | null>(null);
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -16,32 +18,58 @@ export default function Messenger() {
   const [arrivalMessage, setArrivalMessage] = useState<IMessage | null>(null);
   const socket = useRef<any>();
   const scrollRef = useRef<any>();
+  const currentUser = props.user;
+  const navigate = useNavigate();
+  const [users, setUsers] = useState<IUser[]>([]);
+  const url = process.env.REACT_APP_MP_URL;
+  const sockets_url = process.env.REACT_APP_SOCKETS_URL;
+  console.log("urrrrrrl", process.env.REACT_APP_SOCKETS_URL);
 
-  function createRandomUser(): IUser {
-    return {
-      id: "user1",
-      name: "sohaib",
-      email: "sohaib.elmediouni23@gmail.com",
-      username: "sohaibex",
-    };
-  }
+  const fetchData = useCallback(async () => {
+    try {
+      const [usersResponse, conversationsResponse] = await Promise.all([
+        axios.get(url + "/users/all"),
+        axios.get(url + "/conversations/" + currentUser.id),
+      ]);
 
-  const user = createRandomUser();
-  console.log(user);
+      const otherUsers = usersResponse.data.filter(
+        (u: IUser) => u.id !== currentUser.id
+      );
 
-  const url = "http://127.0.0.1:3000/api";
+      setUsers(otherUsers);
+      setConversations(conversationsResponse.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [currentUser.id, url]);
 
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
-    socket.current.on("getMessage", (data: { senderId: any; text: any }) => {
-      console.log("Socket io", data);
+    if (currentUser == null) {
+      navigate("/login");
+    }
+    fetchData();
+  }, [navigate, currentUser, fetchData]);
+
+  useEffect(() => {
+    if (!sockets_url) {
+      console.error("Sockets URL is not defined");
+      return;
+    }
+    const socketIO = io(sockets_url);
+    socketIO.on("getMessage", (data: { senderId: any; text: any }) => {
       setArrivalMessage({
         sender: data.senderId,
         text: data.text,
-        createdAt: Date.now(),
+        createdAt: {
+          _seconds: Math.floor(Date.now() / 1000),
+          _nanoseconds: (Date.now() % 1000) * 1000000,
+        },
       });
     });
-  }, []);
+
+    socketIO.emit("addUser", currentUser.id);
+    socket.current = socketIO;
+  }, [currentUser, sockets_url]);
 
   useEffect(() => {
     arrivalMessage &&
@@ -50,123 +78,168 @@ export default function Messenger() {
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
-    socket.current.emit("addUser", user.id);
-    socket.current.on("getUsers", (users: IUser) => {});
-  }, [user]);
-
-  useEffect(() => {
-    const getConversations = async () => {
-      try {
-        const res = await axios.get(url + "/conversations/" + user.id);
-        setConversations(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getConversations();
-  }, [user.id]);
-
-  useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(url + "/messages/" + currentChat?.id);
-        setMessages(res.data);
-        console.log("getMessages", res.data);
+        if (currentChat?.id) {
+          const res = await axios.get(url + "/messages/" + currentChat.id);
+          // Transform data
+          const transformedData = res.data.map((msg: any) => {
+            if (msg.createdAt && typeof msg.createdAt === "number") {
+              return {
+                ...msg,
+                createdAt: {
+                  _seconds: Math.floor(msg.createdAt / 1000),
+                  _nanoseconds: (msg.createdAt % 1000) * 1000000,
+                },
+              };
+            } else if (
+              msg.createdAt &&
+              msg.createdAt._seconds != null &&
+              msg.createdAt._nanoseconds != null
+            ) {
+              return msg;
+            } else {
+              console.error(
+                `Invalid createdAt for message: ${JSON.stringify(msg)}`
+              );
+              return msg;
+            }
+          });
+
+          setMessages(transformedData);
+        }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     getMessages();
-  }, [currentChat]);
+  }, [currentChat, url]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const startConversation = async (
+    selectedUser: IUser
+  ): Promise<IConversation> => {
+    try {
+      const res = await axios.post(url + "/conversations", {
+        senderId: currentUser.id,
+        receiverId: selectedUser.id,
+      });
+      const newConversation = res.data;
+      setConversations((prevConversations) => [
+        ...prevConversations,
+        newConversation,
+      ]);
+      return newConversation;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    console.log("current Chat", currentChat);
     e.preventDefault();
     const message = {
-      sender: user.id,
+      sender: currentUser.id,
       text: newMessage,
       conversationId: currentChat?.id,
+      createdAt: {
+        _seconds: Math.floor(Date.now() / 1000),
+        _nanoseconds: (Date.now() % 1000) * 1000000,
+      },
     };
 
-    const receiverId = currentChat?.users.find((userId) => userId !== user.id);
+    const receiverId = currentChat?.users.find(
+      (userId) => userId !== currentUser.id
+    );
 
     socket.current?.emit("sendMessage", {
-      senderId: user.id,
+      senderId: currentUser.id,
       receiverId,
       text: newMessage,
     });
 
     try {
       const res = await axios.post(url + "/messages", message);
-      setMessages([...messages, res.data]);
-      console.log("Messages", res.data);
+      setMessages((prevMessages) => [...prevMessages, res.data]);
       setNewMessage("");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
+  const selectUser = async (selectedUser: IUser) => {
+    let conversation = conversations.find((c: IConversation) =>
+      c.users.includes(selectedUser.id)
+    );
+    if (!conversation) {
+      try {
+        conversation = await startConversation(selectedUser);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    setCurrentChat(conversation || null);
+  };
   return (
     <>
-      <Flex width="100vw" height="100vh">
-        <VStack
-          width="30vw"
-          spacing={4}
-          p={4}
-          borderWidth={1}
-          borderRadius="lg"
-        >
-          {conversations.map((c, i) => (
-            <div key={i} onClick={() => setCurrentChat(c)}>
-              <Conversation conversation={c} currentUser={user} />
-            </div>
-          ))}
-        </VStack>
-        {currentChat ? (
-          <>
-            <VStack
-              width="70vw"
-              spacing={4}
-              p={4}
-              borderWidth={1}
-              borderRadius="lg"
-            >
-              <Box
-                width="100%"
-                height="80vh"
-                overflowY="auto"
+      <Base user={currentUser}>
+        <Flex width="100vw" height="100vh">
+          <VStack
+            width="30vw"
+            spacing={4}
+            p={4}
+            borderWidth={1}
+            borderRadius="lg"
+          >
+            {users.map((user, i) => (
+              <div key={i} onClick={() => selectUser(user)}>
+                <Conversation user={user} currentUser={props.user} />
+              </div>
+            ))}
+          </VStack>
+          {currentChat ? (
+            <>
+              <VStack
+                width="70vw"
+                spacing={4}
                 p={4}
                 borderWidth={1}
                 borderRadius="lg"
               >
-                {messages.map((m, i) => (
-                  <div ref={scrollRef} key={i}>
-                    <Message message={m} own={m.sender === user.id} />
-                  </div>
-                ))}
-              </Box>
-              <Flex width="100%">
-                <Input
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  value={newMessage}
-                  placeholder="Type your message"
-                />
-                <Button colorScheme="teal" ml={2} onClick={handleSubmit}>
-                  Send
-                </Button>
-              </Flex>
-            </VStack>
-          </>
-        ) : (
-          <span className="noConversationText">
-            Open a conversation to start a chat.
-          </span>
-        )}
-      </Flex>
+                <Box
+                  width="100%"
+                  height="80vh"
+                  overflowY="auto"
+                  p={4}
+                  borderWidth={1}
+                  borderRadius="lg"
+                >
+                  {messages.map((m, i) => (
+                    <div ref={scrollRef} key={i}>
+                      <Message message={m} own={m.sender === currentUser.id} />
+                    </div>
+                  ))}
+                </Box>
+                <Flex width="100%">
+                  <Input
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    value={newMessage}
+                    placeholder="Type your message"
+                  />
+                  <Button colorScheme="teal" ml={2} onClick={handleSubmit}>
+                    Send
+                  </Button>
+                </Flex>
+              </VStack>
+            </>
+          ) : (
+            <Center flex="1">Open a conversation to start a chat.</Center>
+          )}
+        </Flex>
+      </Base>
     </>
   );
 }
