@@ -23,7 +23,6 @@ export default function Messenger(props: any) {
   const [users, setUsers] = useState<IUser[]>([]);
   const url = process.env.REACT_APP_MP_URL;
   const sockets_url = process.env.REACT_APP_SOCKETS_URL;
-  console.log("urrrrrrl", process.env.REACT_APP_SOCKETS_URL);
 
   const fetchData = useCallback(async () => {
     try {
@@ -31,10 +30,12 @@ export default function Messenger(props: any) {
         axios.get(url + "/users/all"),
         axios.get(url + "/conversations/" + currentUser.id),
       ]);
-
+      console.log("current Usssssss", currentUser);
+      console.log("usersResponse", usersResponse);
       const otherUsers = usersResponse.data.filter(
         (u: IUser) => u.id !== currentUser.id
       );
+      console.log("otherUsers", otherUsers);
 
       setUsers(otherUsers);
       setConversations(conversationsResponse.data);
@@ -185,61 +186,59 @@ export default function Messenger(props: any) {
   };
   return (
     <>
-      <Base user={currentUser}>
-        <Flex width="100vw" height="100vh">
-          <VStack
-            width="30vw"
-            spacing={4}
-            p={4}
-            borderWidth={1}
-            borderRadius="lg"
-          >
-            {users.map((user, i) => (
-              <div key={i} onClick={() => selectUser(user)}>
-                <Conversation user={user} currentUser={props.user} />
-              </div>
-            ))}
-          </VStack>
-          {currentChat ? (
-            <>
-              <VStack
-                width="70vw"
-                spacing={4}
+      <Flex width="100vw" height="100vh">
+        <VStack
+          width="30vw"
+          spacing={4}
+          p={4}
+          borderWidth={1}
+          borderRadius="lg"
+        >
+          {users.map((user, i) => (
+            <div key={i} onClick={() => selectUser(user)}>
+              <Conversation user={user} currentUser={props.user} />
+            </div>
+          ))}
+        </VStack>
+        {currentChat ? (
+          <>
+            <VStack
+              width="70vw"
+              spacing={4}
+              p={4}
+              borderWidth={1}
+              borderRadius="lg"
+            >
+              <Box
+                width="100%"
+                height="80vh"
+                overflowY="auto"
                 p={4}
                 borderWidth={1}
                 borderRadius="lg"
               >
-                <Box
-                  width="100%"
-                  height="80vh"
-                  overflowY="auto"
-                  p={4}
-                  borderWidth={1}
-                  borderRadius="lg"
-                >
-                  {messages.map((m, i) => (
-                    <div ref={scrollRef} key={i}>
-                      <Message message={m} own={m.sender === currentUser.id} />
-                    </div>
-                  ))}
-                </Box>
-                <Flex width="100%">
-                  <Input
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    value={newMessage}
-                    placeholder="Type your message"
-                  />
-                  <Button colorScheme="teal" ml={2} onClick={handleSubmit}>
-                    Send
-                  </Button>
-                </Flex>
-              </VStack>
-            </>
-          ) : (
-            <Center flex="1">Open a conversation to start a chat.</Center>
-          )}
-        </Flex>
-      </Base>
+                {messages.map((m, i) => (
+                  <div ref={scrollRef} key={i}>
+                    <Message message={m} own={m.sender === currentUser.id} />
+                  </div>
+                ))}
+              </Box>
+              <Flex width="100%">
+                <Input
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  value={newMessage}
+                  placeholder="Type your message"
+                />
+                <Button colorScheme="teal" ml={2} onClick={handleSubmit}>
+                  Send
+                </Button>
+              </Flex>
+            </VStack>
+          </>
+        ) : (
+          <Center flex="1">Open a conversation to start a chat.</Center>
+        )}
+      </Flex>
     </>
   );
 }
