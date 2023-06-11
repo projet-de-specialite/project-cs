@@ -8,7 +8,6 @@ import IUser from "../../models/User";
 import IConversation from "../../models/Conversation";
 import IMessage from "../../models/Message";
 import { useNavigate } from "react-router-dom";
-import Base from "../Base";
 
 export default function Messenger(props: any) {
   const [conversations, setConversations] = useState<IConversation[]>([]);
@@ -42,7 +41,7 @@ export default function Messenger(props: any) {
     } catch (err) {
       console.error(err);
     }
-  }, [currentUser.id, url]);
+  }, [currentUser, url]);
 
   useEffect(() => {
     if (currentUser == null) {
@@ -113,7 +112,9 @@ export default function Messenger(props: any) {
         console.error(err);
       }
     };
-    getMessages();
+    getMessages().catch((err) => {
+      console.error(err);
+    });
   }, [currentChat, url]);
 
   useEffect(() => {
