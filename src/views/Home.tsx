@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import Base from "./Base";
 import PostService from "../services/post";
+import {uuid} from 'uuidv4';
 
 export default function Home(props: any) {
 
@@ -30,7 +31,7 @@ export default function Home(props: any) {
                 {user != "" &&
                     <SimpleGrid columns={1} spacing={10}>
                         {posts && posts.map(post =>
-                            <Post post={post} user_id={user.id}/>
+                            <Post key={uuid()} post={post} user_id={user.id}/>
                         )}
                     </SimpleGrid>
                 }
