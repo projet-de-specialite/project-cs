@@ -29,12 +29,9 @@ export default function Messenger(props: any) {
         axios.get(url + "/users/all"),
         axios.get(url + "/conversations/" + currentUser.id),
       ]);
-      console.log("current Usssssss", currentUser);
-      console.log("usersResponse", usersResponse);
       const otherUsers = usersResponse.data.filter(
         (u: IUser) => u.id !== currentUser.id
       );
-      console.log("otherUsers", otherUsers);
 
       setUsers(otherUsers);
       setConversations(conversationsResponse.data);
